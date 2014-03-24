@@ -71,7 +71,7 @@ public class DomainController {
         game.createNewRound(turns);
     }
     
-    public void performMove() {
+    public void performMove(int sx, int sy, int dx, int dy) {
         game.performMove();
     }
     
