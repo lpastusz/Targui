@@ -20,6 +20,14 @@ public class Game {
 
     private int roundNumber;
     
+    private boolean isPlayerInGame(Player player) {
+        for (int i = 0; i < Constants.BoardSize; i++)
+            for (int j = 0; j < Constants.BoardSize; j++)
+                if (board.getCell(i, j).getOwner() == player)
+                    return true;
+        return false;
+    }
+    
     public Game() {
         board = new Board();
         mCards = new ArrayList<MCard>();
@@ -74,9 +82,8 @@ public class Game {
         return board.getSector(sectorNum);
     }
     
-    public void placeSettlementCard(int row, int column, int playerNumber) {
+    public void placeSettlementCard(int row, int column, Player player) {
         Cell cell = board.getCell(row, column);
-        Player player = plRepository.getPlayer(playerNumber);
         if (cell.getSector() != player.getSector())
             throw new IllegalArgumentException("wrong sector");
         else {
@@ -98,25 +105,44 @@ public class Game {
     
     private void createMCards(int mCardsNumber) {
         int counter = 0;
-        if (counter++ < mCardsNumber) mCards.add(new MineAttackedMCard());
-        if (counter++ < mCardsNumber) mCards.add(new SilverDiscoveredMCard());
-        if (counter++ < mCardsNumber) mCards.add(new SettlementsAttackedMCard());
-        if (counter++ < mCardsNumber) mCards.add(new WaterPoisonedMCard());
-        if (counter++ < mCardsNumber) mCards.add(new ErgChangedMCard());
-        if (counter++ < mCardsNumber) mCards.add(new GueltaCamelsBornMCard());
-        if (counter++ < mCardsNumber) mCards.add(new RagRainfallMCard());
-        if (counter++ < mCardsNumber) mCards.add(new EntireBoardAttackedMCard());    
-        if (counter++ < mCardsNumber) mCards.add(new PlagueBreakingOutMCard());
-        if (counter++ < mCardsNumber) mCards.add(new CaravanAttackedMCard());
-        if (counter++ < mCardsNumber) mCards.add(new SaharaDroughtMCard());
-        if (counter++ < mCardsNumber) mCards.add(new SaharaSandstormMCard()); 
+        if (counter++ < mCardsNumber) mCards.add(new MineAttackedMCard(board, plRepository));
+        if (counter++ < mCardsNumber) mCards.add(new SilverDiscoveredMCard(board, plRepository));
+        if (counter++ < mCardsNumber) mCards.add(new SettlementsAttackedMCard(board, plRepository));
+        if (counter++ < mCardsNumber) mCards.add(new WaterPoisonedMCard(board, plRepository));
+        if (counter++ < mCardsNumber) mCards.add(new ErgChangedMCard(board, plRepository));
+        if (counter++ < mCardsNumber) mCards.add(new GueltaCamelsBornMCard(board, plRepository));
+        if (counter++ < mCardsNumber) mCards.add(new RagRainfallMCard(board, plRepository));
+        if (counter++ < mCardsNumber) mCards.add(new EntireBoardAttackedMCard(board, plRepository));    
+        if (counter++ < mCardsNumber) mCards.add(new PlagueBreakingOutMCard(board, plRepository));
+        if (counter++ < mCardsNumber) mCards.add(new CaravanAttackedMCard(board, plRepository));
+        if (counter++ < mCardsNumber) mCards.add(new SaharaDroughtMCard(board, plRepository));
+        if (counter++ < mCardsNumber) mCards.add(new SaharaSandstormMCard(board, plRepository)); 
         for (int i = 0; i < Constants.PlayerCount; i++)
-            if (counter++ < mCardsNumber) mCards.add(new PlayerGiftMCard(plRepository.getPlayer(i)));
+            if (counter++ < mCardsNumber) mCards.add(new PlayerGiftMCard(plRepository.getPlayer(i), board, plRepository));
         
         Collections.shuffle(mCards, new Random(System.currentTimeMillis()));
     }
     
     public boolean isGameEnd() {
+        boolean[] playersWithPosession;
+        playersWithPosession = new boolean[Constants.PlayerCount];
+        for (int i = 0; i < Constants.PlayerCount; i++)
+            playersWithPosession[i] = false;
+        
+        for (int i = 0; i < Constants.BoardSize; i++) {
+            for (int j = 0; j < Constants.BoardSize; j++) {
+                if (board.getCell(i, j).getOwner() != null)
+                    playersWithPosession[board.getCell(i, j).getOwner().getNumber()] = true;
+            }
+        }
+        
+        int count = 0;
+        for (int i = 0; i < Constants.PlayerCount; i++)
+            if (playersWithPosession[i])
+                count += 1;
+        if (count == 1)
+            return true;
+        
         if (round == null)
             return false;
         if (round.getNumber() == roundNumber-1)
@@ -126,9 +152,8 @@ public class Game {
     }
    
     
-    public int throwTurnNumber() {
-        int num = dice.getNumber();       
-        return num;
+    public int throwDice() {
+        return dice.getNumber();
     }
     
     public boolean isRoundEnd() {
@@ -158,7 +183,15 @@ public class Game {
     }
     
     public int getNextRoundCard() {
-        return round.getNextCard();    
+        do {
+            int playerNumber = round.getNextCard();
+            // you should instanceof
+            if (playerNumber == -1)
+                return playerNumber;
+
+            if (isPlayerInGame(plRepository.getPlayer(playerNumber)))
+                return playerNumber; 
+        }while(true);
     }
     
     public boolean canPerformMove() {
@@ -175,5 +208,94 @@ public class Game {
     
    public void performPurchase() {
         round.performPurchase();
+    }
+   
+   public void performMove(Player player, int sx, int sy, int dx, int dy, int camels) {
+       if (board.getCell(dy, dx).getOwner() != player)
+           round.playerLoseCell(player.getNumber());
+        board.performMove(player, sx, sy, dx, dy, camels);
+        round.performMove();
+    }
+   
+       public boolean isAttack(Player player, int dx, int dy) {
+        return board.isAttack(player, dx, dy);
+    }
+       
+    public boolean isOwner(Player player, int x, int y) {
+        return board.isOwner(player, x, y);
+    }
+    
+    public void buyCamels(Player player, int amount) {
+        try {
+            player.subtractSilverForCamels(amount);
+        } catch(IllegalArgumentException e) {
+            throw e;
+        }
+    }
+    
+    public void placeCamels(Player player, int x, int y, int amount) {
+        if (player != board.getCell(x,y).getOwner())
+            throw new IllegalArgumentException();
+        
+        if (board.getCell(y, x).getTCard() == TCard.CHOTT)
+            throw new IllegalArgumentException();
+        board.placeCamels(x, y, amount); 
+        round.performPurchase();
+    }
+    
+    public Player getPlayer(int x, int y) {
+        return board.getPlayer(x, y);
+    }
+    
+    public void attack(int sx, int sy, int dx, int dy, int num) {
+        Cell cellDestination = board.getCell(dy, dx);
+        Cell cellSource = board.getCell(sy, sx);
+        
+        int dmg = num;
+        dmg += (round.didErgStrategicValueChanged() && (cellSource.getTCard() == TCard.ERG)) ? Constants.ErgUpdatedStrategicValue : cellSource.getTCard().getStrategicValue();
+        dmg /= 2;
+        cellDestination.removeCamels(dmg);
+    }
+    
+    public boolean isWithCamels(int dx, int dy) {
+        return (board.getCell(dy, dx).getCamels() > 0);
+    }
+    
+    public void giveLevy() {
+        int[] count;
+        count = new int[Constants.PlayerCount];
+        
+        for (int row = 0; row < Constants.BoardSize; row++) {
+            for (int column = 0; column < Constants.BoardSize; column++) {
+                Cell cell = board.getCell(row, column);
+                if (cell.getOwner() != null) {
+                    if ((cell.getTCard() == TCard.MOUNTAIN) && (round.didMountanEconomicValueChanged()))
+                        count[cell.getOwner().getNumber()] += Constants.MountainUpdatedEconomicValue;
+                    else
+                        count[cell.getOwner().getNumber()] += cell.getTCard().getEconomicValue();
+                }
+            }
+        }
+        
+        for (int row = 0; row < Constants.BoardSize; row++) {
+            for (int column = 0; column < Constants.BoardSize; column++) {
+                Cell cell = board.getCell(row, column);
+               if (cell.getTCard() == TCard.SETTLEMENT) {
+                   if (cell.getSector() != cell.getOwner().getSector()) {
+                       count[plRepository.getPlayer(cell.getSector()).getNumber()] = 0;                    
+                   }
+               }
+            }
+        }
+        
+        
+        for (int i = 0; i < Constants.PlayerCount; i++)
+            if (!round.didPlayerLostCell(i))
+                plRepository.getPlayer(i).addSilver(count[i]);
+    }
+    
+    
+    public boolean isNextRoundCardMCard() {
+        return round.isNextRoundCardMCard();
     }
 }

@@ -50,4 +50,26 @@ public class Player {
     public void insertTCard(TribalCard card) {
         tCards.add(card);
     }
+    
+    public int getSilver() {
+        return silver;
+    }
+    
+    public void subtractSilverForCamels(int amount) {
+        if (silver < amount)
+            throw new IllegalArgumentException();
+        silver -= amount;
+    }
+    
+    public void addSilver(int num) {
+        silver = num;
+    }
+    
+    public void removeSilver(int num) {
+        silver = (silver >= num) ? silver-num : 0;
+    }
+    
+    public void removeSilver() {
+        silver = 0;
+    }
 }

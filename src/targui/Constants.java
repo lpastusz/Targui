@@ -11,6 +11,8 @@ public interface Constants {
     public static final int PlayerCount = 4;
     public static final int MinRounds = 1;
     public static final int MaxRounds = 16;
+    public static final int MountainUpdatedEconomicValue = 3;
+    public static final int ErgUpdatedStrategicValue = 3;
     
     
     public interface TCardCounts {

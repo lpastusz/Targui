@@ -16,9 +16,9 @@ public class UC4 {
     
     public void playNextRound() {
         UC5 turn = new UC5(controller);
-        System.out.println("Number of turns: " + controller.throwTurnNumber() + " each player");
+        System.out.println("Number of turns: " + controller.throwDice()+ " each player");
         
-        int turns = controller.throwTurnNumber();
+        int turns = controller.throwDice();
         controller.createNewRound(turns);
         while (!controller.isRoundEnd()) {
             System.out.print("ENTER to play next turn");
@@ -28,9 +28,13 @@ public class UC4 {
                 e.printStackTrace();
             }
             
-            int player = controller.getNextRoundCard();
-            if (player == -1) System.out.println("Misfortune card played");
-            else turn.playNextTurn(player);
+            
+            if (controller.isNextRoundCardMCard())
+                System.out.println("Misfortune card played");
+            else {
+                int player = controller.getNextRoundCard();
+                turn.playNextTurn(player);
+            }
         }
     }
 }

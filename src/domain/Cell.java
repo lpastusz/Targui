@@ -39,6 +39,18 @@ public class Cell {
         return camels;
     }
     
+    public void removeCamels() {
+        camels = 0;
+    }
+    
+    public void removeCamels(int num) {
+        camels = (camels >= num) ? camels-num : 0; 
+    }
+    
+    public void setCamels(int num) {
+        camels = num;
+    }
+    
     public void setOwner(Player player) {
         owner = player;
     }

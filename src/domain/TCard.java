@@ -20,4 +20,12 @@ public enum TCard {
         economicValue = economicValueParam;
         strategicValue = strategicValueParam;
     }
+    
+    public int getEconomicValue() {
+        return economicValue;
+    }
+    
+    public int getStrategicValue() {
+        return strategicValue;
+    }
 }

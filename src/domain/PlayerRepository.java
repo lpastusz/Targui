@@ -88,4 +88,11 @@ public class PlayerRepository {
                 return p;
         return null;
     }
+    
+    public Player getPlayer(Sector s) {
+        for (Player p : players)
+            if (p.getSector() == s)
+                return p;
+        return null;
+    }
 }

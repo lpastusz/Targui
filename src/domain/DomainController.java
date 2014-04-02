@@ -37,7 +37,7 @@ public class DomainController {
     
     public void placeSettlementCard(int row, int column, int playerNumber) {
         try {
-            game.placeSettlementCard(row, column, playerNumber);
+            game.placeSettlementCard(row, column, plRepository.getPlayer(playerNumber));
         } catch (IllegalArgumentException e) {
             throw e;
         }
@@ -56,11 +56,7 @@ public class DomainController {
     }
     
     public boolean isRoundEnd() {
-        return game.isRoundEnd();
-    }
-    
-    public int throwTurnNumber() {
-        return game.throwTurnNumber();
+        return (game.isRoundEnd() || game.isGameEnd());
     }
     
     public int getNextRoundCard() {
@@ -71,8 +67,8 @@ public class DomainController {
         game.createNewRound(turns);
     }
     
-    public void performMove(int sx, int sy, int dx, int dy) {
-        game.performMove();
+    public void performMove(int player, int sx, int sy, int dx, int dy, int camels) {
+        game.performMove(plRepository.getPlayer(player), sx, sy, dx, dy, camels);
     }
     
    public void performPurchase() {
@@ -85,5 +81,49 @@ public class DomainController {
     
     public boolean canPerformPurchase() {
         return game.canPerformPurchase();
+    }
+    
+    public boolean isAttack(int player, int dx, int dy) {
+        return game.isAttack(plRepository.getPlayer(player), dx, dy);
+    }
+    
+    public boolean isOwner(int player, int x, int y) {
+        return game.isOwner(plRepository.getPlayer(player), x, y);
+    }
+    
+    public void buyCamels(int player, int amount) {
+        try {
+            game.buyCamels(plRepository.getPlayer(player), amount);
+        } catch(IllegalArgumentException e) {
+            throw e;
+        }
+    }
+    
+    public void placeCamels(int player, int x, int y, int amount) {
+        game.placeCamels(plRepository.getPlayer(player), x, y, amount);
+    }
+    
+    public int getOpponent(int x, int y) {
+        return game.getPlayer(x, y).getNumber();
+    }
+    
+    public int throwDice() {
+        return game.throwDice();
+    }
+    
+    public void attack(int sx, int sy, int dx, int dy, int num) {
+        game.attack(sx, sy, dx, dy, num);
+    }
+    
+    public boolean isWithCamels(int dx, int dy) {
+        return game.isWithCamels(dx, dy);
+    }
+    
+    public void giveLevy() {
+        game.giveLevy();
+    }
+    
+    public boolean isNextRoundCardMCard() {
+        return game.isNextRoundCardMCard();
     }
 }

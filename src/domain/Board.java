@@ -1,6 +1,7 @@
 package domain;
 import targui.Constants;
 import java.util.ArrayList;
+import java.lang.IllegalArgumentException;
 
 /**
  *
@@ -85,5 +86,37 @@ public class Board {
     
     public Cell getCell(int row, int column) {
         return Cells[row][column];
+    }
+    
+    public Cell getSettlementCell(Player pl) {
+        for (int i = 0; i < Constants.BoardSize; i++)
+            for (int j = 0; j < Constants.BoardSize; j++)
+                if ((Cells[j][i].getTCard() == TCard.SETTLEMENT) && (Cells[j][i].getOwner() == pl))
+                    return Cells[j][i];
+        throw new IllegalArgumentException();
+    }
+    
+    public void performMove(Player player, int sx, int sy, int dx, int dy, int camels) {
+        Cells[sy][sx].setOwner(player);
+        Cells[sy][sx].addCamels(camels);
+        Cells[dy][dx].removeCamels(camels);
+    }
+    
+    public boolean isAttack(Player player, int dx, int dy) {
+        return((Cells[dy][dx].getOwner() != player) && (Cells[dy][dx].getCamels() > 0));
+    }
+    
+    public boolean isOwner(Player player, int x, int y) {
+        return (Cells[y][x].getOwner() == player);
+    }
+    
+    
+    public void placeCamels(int x, int y, int amount) {
+        Cells[y][x].addCamels(amount);
+    }
+    
+    
+    public Player getPlayer(int x, int y) {
+        return Cells[y][x].getOwner();
     }
 }

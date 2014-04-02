@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 import java.lang.Exception.*;
+import domain.MCards.*;
+import targui.Constants;
 
 /**
  *
@@ -11,14 +13,21 @@ import java.lang.Exception.*;
  */
 public class Round {
     private static int roundNumber = 0;
+    private boolean[] playerLoseCell;
+    private boolean mountanEconomicValueChanged;
+    private boolean ergStrategicValueChanged;
     private ArrayList<RoundCard> rCards;
     private ArrayList<RoundCard> usedCards;
     private int number;
     protected int moveActionsAvailable, purchaseActionsAvailable;
     Round() {        
+        mountanEconomicValueChanged = ergStrategicValueChanged = false;
         number = roundNumber++;
         rCards = new ArrayList<RoundCard>();
         usedCards = new ArrayList<RoundCard>();
+        playerLoseCell = new boolean[Constants.PlayerCount];
+        for (int i = 0; i < Constants.PlayerCount; i++)
+            playerLoseCell[i] = false;
     }
     
     public int getNumber() {
@@ -43,7 +52,9 @@ public class Round {
             return player.getNumber();
         }
         else if (card instanceof MCard) {
-            //just destroying Misfortune card
+            ((MCard)card).proceed();
+            if (card instanceof SilverDiscoveredMCard)
+                
             return -1;
         }
         return 0;
@@ -92,5 +103,26 @@ public class Round {
    private void decreasePurchaseAvailable() {
        purchaseActionsAvailable -= 1;
        if (moveActionsAvailable > purchaseActionsAvailable) moveActionsAvailable -= 1;
+   }
+   
+   public void playerLoseCell(int player) {
+       playerLoseCell[player] = true;
+   }
+   
+   public boolean didPlayerLostCell(int player) {
+       return playerLoseCell[player];
+   }
+   
+   public boolean isNextRoundCardMCard() {
+       RoundCard card = rCards.get(0);
+       return ( card instanceof MCard);
+   }
+   
+   public boolean didErgStrategicValueChanged() {
+       return ergStrategicValueChanged;
+   }
+   
+   public boolean didMountanEconomicValueChanged() {
+       return mountanEconomicValueChanged;
    }
 }

@@ -44,6 +44,7 @@ public class UC3 {
                 e.printStackTrace();
             }
             round.playNextRound();
+            controller.giveLevy();
         }
     }
 }
