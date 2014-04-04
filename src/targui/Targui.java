@@ -1,17 +1,25 @@
 package targui;
 import domain.DomainController;
-import ui.ConsoleApplication;
+import javafx.application.Application;
+import static javafx.application.Application.*;
+import javafx.stage.Stage;
+import gui.GuiApplication;
 
 /**
  *
  * @author Lukas.Pasta
  */
-public class Targui {
+public class Targui extends Application {
     
     public static void main(String[] args) {
+        launch(args);
+    }
+    
+    @Override
+    public void start(Stage primaryStage) {
         DomainController controller = new DomainController();
-        ConsoleApplication app = new ConsoleApplication(controller);
-        app.Start();
+        GuiApplication app = new GuiApplication(controller);
+        app.start(primaryStage);
     }
     
 }

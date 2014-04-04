@@ -12,11 +12,11 @@ public class Player {
     private final int               number;
     private final String            name;
     private final Sector            sector;
-    private final Color             color;
+    private final String            color;
     private int                     silver;
     private ArrayList<TribalCard>   tCards;
     
-    public Player(String nameParam, Color colorParam, Sector sectorParam) {
+    public Player(String nameParam, String colorParam, Sector sectorParam) {
         number = playerNumber++;
         name = nameParam;
         sector = sectorParam;
@@ -39,7 +39,7 @@ public class Player {
         return sector;
     }
     
-    public Color getColor() {
+    public String getColor() {
         return color;
     }
     

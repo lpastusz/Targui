@@ -1,0 +1,14 @@
+#root {
+     -fx-background-image: url("img/bg.jpg");
+     -fx-background-size: stretch;
+    
+}
+
+#line {
+    -fx-background-color: rgba(91,90,61, 0.8);
+    -fx-padding: 10px;
+}
+
+#startButton {
+    -fx-padding: 0px 0px 0px 20px;
+}

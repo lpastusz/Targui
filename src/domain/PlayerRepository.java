@@ -28,9 +28,9 @@ public class PlayerRepository {
                 throw new IllegalArgumentException("name");
             }
             
-            Color color;
+           // Color color;
             try {
-                color = validateColor(colorParam);
+                validateColor(colorParam);
             } catch (IllegalArgumentException e) {
                 throw new IllegalArgumentException("color");
             }
@@ -42,7 +42,7 @@ public class PlayerRepository {
             } catch (IllegalArgumentException e) {
                 throw new IllegalArgumentException("sector");
             }
-            players.add(new Player(nameParam, color, sector));
+            players.add(new Player(nameParam, colorParam, sector));
         }
     
     
@@ -55,7 +55,8 @@ public class PlayerRepository {
         }
     }
     
-    private Color validateColor(String colorParam) {
+    private void validateColor(String colorParam) {
+        /*
         Color color;
         try {
             Field field = Class.forName("java.awt.Color").getField(colorParam.toLowerCase());
@@ -63,12 +64,13 @@ public class PlayerRepository {
         } catch (Exception e) {
             throw new IllegalArgumentException();
         }
+        */
+        
 
         for (Player p : players) {
-            if (p.getColor() == color)
+            if (p.getColor().compareTo(colorParam) == 0)
                 throw new IllegalArgumentException();
         }
-        return color;
     }
     
     private Sector validateSector(int sectorParam) {
