@@ -22,6 +22,7 @@ public class GuiApplication {
     private DomainController controller;
     GridPane gridPane = new GridPane();
     Scene scene;
+    SimpleStringProperty page;
     
     //pages
     PlayerRegistration playerRegistration;
@@ -30,16 +31,22 @@ public class GuiApplication {
     public GuiApplication(DomainController controllerParam) {
         controller = controllerParam;
         controller.startGame();
+        controller.placeTCardsOnBoard();
     }
     
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Targui");  
         
-        SimpleStringProperty page = new SimpleStringProperty();    
+        page = new SimpleStringProperty();    
         
         playerRegistration = new PlayerRegistration(controller);
         playerRegistration.setControlString(page);
+        playerRegistration.newRegistration();
         
+        controller.registerPlayer("Lukas", "green", 1);
+        controller.registerPlayer("Marek", "blue", 2);
+        controller.registerPlayer("Petr", "white", 3);
+        controller.registerPlayer("Honza", "yellow", 4);
         
         
         
@@ -47,10 +54,13 @@ public class GuiApplication {
             public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
                 //set new page
                 if (newValue.compareTo("registration") == 0)
-                    gridPane = playerRegistration.showRegistration();
+                    gridPane = playerRegistration.getView();
                 
-                else {
-                    gridPane = new GridPane();
+                else if (newValue.compareTo("game") == 0){
+                    gamePlay = new GamePlay(controller);
+                    gamePlay.setControlString(page);
+                    gamePlay.createView();
+                    gridPane = gamePlay.getView();
                 }
                 
                 //set scene to new page
@@ -59,17 +69,17 @@ public class GuiApplication {
             }
         });
         
-        page.setValue("registration");
+        page.setValue("game");
         
         
-        scene = new Scene(gridPane, 867, 397);
+        scene = new Scene(gridPane, 1230, 565);
         scene.getStylesheets().add
             (this.getClass().getResource("css.css").toExternalForm());
         primaryStage.setScene(scene);
-        primaryStage.setMinHeight(397); 
-        primaryStage.setMaxHeight(397); 
-        primaryStage.setMinWidth(867); 
-        primaryStage.setMaxWidth(867);
+        primaryStage.setMinHeight(565); 
+        primaryStage.setMaxHeight(565); 
+        primaryStage.setMinWidth(1230); 
+        primaryStage.setMaxWidth(1230);
         primaryStage.show();
     } 
 }

@@ -42,10 +42,14 @@ public class PlayerRegistration {
         page = pageParam;
     }
     
-    public GridPane showRegistration() {
+    public GridPane getView() {
+        return gridPane;
+    }
+    
+    public void newRegistration() {
         gridPane = new GridPane();
         
-        gridPane.setId("root");
+        gridPane.setId("rootRegistration");
         gridPane.setAlignment(Pos.BOTTOM_RIGHT);
         gridPane.setPadding(new Insets(0, 50, 20, 0));
         
@@ -109,15 +113,13 @@ public class PlayerRegistration {
                                 if (pp.isEnabled() == false)
                                     count += 1;
                             if (count == 4)
-                                page.setValue("empty");
+                                page.setValue("game");
                         }
                         else break;
                             
                     }
             }
          } }); 
-        
-        return gridPane;
     }
     
     private void showDialog(String text) {

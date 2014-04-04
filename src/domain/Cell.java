@@ -1,30 +1,39 @@
 package domain;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+
 /**
  *
  * @author Lukas.Pasta
  */
 public class Cell {
     private Sector sector;
-    private TCard tCard;
-    private Player owner;
-    private int camels;
+    private ObjectProperty <TCard> tCard;
+    private ObjectProperty<Player> owner;
+    private IntegerProperty camels;
     Cell() {
-        
+        tCard = new SimpleObjectProperty<TCard>();
+        camels = new SimpleIntegerProperty();
+        owner = new SimpleObjectProperty<Player>();
     }
     
     Cell(Sector sectorParam) {
         sector = sectorParam;
-        camels = 0;
-        owner = null;
+        camels = new SimpleIntegerProperty();
+        camels.set(0);
+        owner = new SimpleObjectProperty<Player>();
+        tCard = new SimpleObjectProperty<TCard>();
     }
     
     public void setTCard(TCard tCardParam) {
-        tCard = tCardParam;
+        tCard.set(tCardParam);
     }
     
     public TCard getTCard() {
-        return tCard;
+        return tCard.get();
     }
     
     public Sector getSector() {
@@ -32,30 +41,45 @@ public class Cell {
     }
     
     public void addCamels(int num) {
-        camels += num;
+        camels.set(camels.get() + num);
     }
     
     public int getCamels() {
-        return camels;
+        return camels.get();
     }
     
     public void removeCamels() {
-        camels = 0;
+        camels.set(0);
     }
     
     public void removeCamels(int num) {
-        camels = (camels >= num) ? camels-num : 0; 
+        if (camels.get() >= num)
+            camels.set(camels.get()-num);
+        else
+            camels.set(0);
     }
     
     public void setCamels(int num) {
-        camels = num;
+        camels.set(0);
     }
     
     public void setOwner(Player player) {
-        owner = player;
+        owner.set(player);
     }
     
     public Player getOwner() {
+        return owner.get();
+    }
+    
+    public ObjectProperty<TCard> getTCardProperty() {
+        return tCard;
+    }
+    
+    public ObjectProperty<Player> getPlayerProperty() {
         return owner;
+    }
+    
+    public IntegerProperty getCamelsProperty() {
+        return camels;
     }
 }

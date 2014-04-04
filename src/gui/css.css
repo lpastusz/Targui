@@ -1,7 +1,6 @@
-#root {
+#rootRegistration {
      -fx-background-image: url("img/bg.jpg");
-     -fx-background-size: stretch;
-    
+     -fx-background-size: stretch; 
 }
 
 #line {
@@ -11,6 +10,11 @@
 
 #startButton {
     -fx-padding: 0px 0px 0px 20px;
+}
+
+#playersInfo {
+    -fx-background-color: rgba(91,90,61, 0.8);
+    -fx-padding: 10px 10px 10px 10px;
 }
 
 
@@ -23,3 +27,50 @@
 
     #dialogButton {
     }
+    
+    
+#rootGame {
+     -fx-background-image: url("img/bg.jpg");
+     -fx-background-size: stretch; 
+}
+
+
+#CHOTT {
+    -fx-background-image: url(img/chott.jpg);
+    -fx-background-size: stretch; 
+}
+
+#ERG {
+    -fx-background-image: url(img/erg.jpg);
+    -fx-background-size: stretch; 
+}
+
+#FESH {
+    -fx-background-image: url(img/fesh.jpg);
+    -fx-background-size: stretch; 
+}
+
+#GUELTA {
+    -fx-background-image: url(img/guelta.jpg);
+    -fx-background-size: stretch; 
+}
+
+#MINE {
+    -fx-background-image: url(img/mine.jpg);
+    -fx-background-size: stretch; 
+}
+
+#MOUNTAIN {
+    -fx-background-image: url(img/mountain.jpg);
+    -fx-background-size: stretch; 
+}
+
+#REG {
+    -fx-background-image: url(img/reg.jpg);
+    -fx-background-size: stretch; 
+}
+
+#SETTLEMENT {
+    -fx-background-image: url(img/settlement.jpg);
+    -fx-background-size: stretch; 
+}
