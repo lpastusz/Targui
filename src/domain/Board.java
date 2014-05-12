@@ -15,7 +15,7 @@ public class Board {
     public Board() {
         Sectors = new Sector[Constants.SectorCount];
         for (int i = 0; i < Constants.SectorCount; i++)
-            Sectors[i] = new Sector();
+            Sectors[i] = new Sector(i);
         
         Cells = new Cell[Constants.BoardSize][Constants.BoardSize];  
         for (int i = 0; i < Constants.BoardSize; i++) {

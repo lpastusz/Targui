@@ -8,18 +8,14 @@ package gui;
 
 import domain.DomainController;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.layout.VBoxBuilder;
-import javafx.scene.text.Text;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
@@ -27,15 +23,17 @@ import javafx.stage.Stage;
  * @author lukas_000
  */
 public class PlayerRegistration {
+    ErrorDialog errorDialog = new ErrorDialog();
     private ArrayList<PlayerRowView> rows = new ArrayList<PlayerRowView>();
     private DomainController controller;
     GridPane gridPane;
-    Stage dialogStage;
     SimpleStringProperty page;
+    ResourceBundle labels;
     
     
-    public PlayerRegistration(DomainController controllerParam) {
-        controller = controllerParam;    
+    public PlayerRegistration(DomainController controllerParam, ResourceBundle labelsParam) {
+        controller = controllerParam;  
+        labels = labelsParam;
     }
     
     public void setControlString(SimpleStringProperty pageParam) {
@@ -64,25 +62,38 @@ public class PlayerRegistration {
         buttonGrid.setId("startButton");
         buttonGrid.setAlignment(Pos.CENTER);
         
-        Button begin = new Button("Start game");
-        begin.setPrefSize(150, 50);
+        Button begin = new Button(labels.getString("StartGameButton"));
+        begin.setPrefSize(120, 60);
         begin.setAlignment(Pos.CENTER);
         
-        buttonGrid.add(begin, 0, 0, 1, 4);
+        Button back = new Button(labels.getString("BackButton"));
+        back.setPrefSize(120, 60);
+        back.setAlignment(Pos.CENTER);
+        
+        buttonGrid.add(begin, 0, 0);
+        buttonGrid.add(back, 0, 1);
+        buttonGrid.setVgap(10);
         gridPane.add(buttonGrid, 1, 0, 1, 4);
+        
+        back.setOnAction(new EventHandler<ActionEvent>() {     
+            public void handle(ActionEvent event) { 
+                controller.resetGame();
+                page.set("menu");
+            }
+        });
         
         begin.setOnAction(new EventHandler<ActionEvent>() {     
             public void handle(ActionEvent event) {  
                 for (PlayerRowView p : rows) {
                     if (p.isEnabled()) {
                         if (p.getName().isEmpty()) {
-                            showDialog("Name can not be empty");
+                            errorDialog.showDialog(labels.getString("EmptyNameError"));
                             break;
                         }
                         
                         System.out.println("S: " + p.getSector());
                         if (p.getSector() < 1 || p.getSector() > 4) {
-                            showDialog("You have to select a sector");
+                            errorDialog.showDialog(labels.getString("EmptySectorError"));
                             break;
                         }
                         
@@ -91,15 +102,15 @@ public class PlayerRegistration {
                             controller.registerPlayer(p.getName(), p.getColor(), p.getSector());
                         } catch(IllegalArgumentException e) {
                             if (e.getMessage().compareTo("name") == 0)  {
-                                showDialog("Wrong name");
+                                errorDialog.showDialog(labels.getString("NameUsedError"));
                                 err = true;
                             }
                             if (e.getMessage().compareTo("color") == 0)  {
-                                showDialog("Wrong color");
+                                errorDialog.showDialog(labels.getString("ColorUsedError"));
                                 err = true;
                             }
                             if (e.getMessage().compareTo("sector") == 0)  {
-                                showDialog("Wrong sector");
+                                errorDialog.showDialog(labels.getString("SectorUsedError"));
                                 err = true;
                             }
                         }
@@ -112,40 +123,15 @@ public class PlayerRegistration {
                             for (PlayerRowView pp : rows)
                                 if (pp.isEnabled() == false)
                                     count += 1;
-                            if (count == 4)
+                            if (count == 4) {
+                                controller.setGameLoaded(false);
                                 page.setValue("game");
+                            }
                         }
                         else break;
                             
                     }
             }
          } }); 
-    }
-    
-    private void showDialog(String text) {
-        VBox box = new VBox();
-        box.setSpacing(20);
-        box.setAlignment(Pos.CENTER);
-        box.setId("dialog");
-        Text t = new Text(text);
-        t.setId("dialogText");
-        Button b = new Button("Ok.");
-        b.setId("dialogButton");
-        box.getChildren().addAll(t, b);
-        dialogStage = new Stage();
-        dialogStage.initModality(Modality.WINDOW_MODAL);
-        dialogStage.setScene(new Scene(VBoxBuilder.create().
-            children(box).
-            alignment(Pos.CENTER).padding(new Insets(5)).build()));
-        dialogStage.getScene().getStylesheets().add
-            (this.getClass().getResource("css.css").toExternalForm());
-        dialogStage.show();
-        
-        b.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent e) {
-                dialogStage.hide();
-            }
-        });
     }
 }

@@ -29,6 +29,18 @@ public class Player {
             tCards.add(new TribalCard(this));
     }
     
+    public Player(String nameParam, String colorParam, Sector sectorParam, int numberParam, int silverParam) {
+        number = numberParam;
+        name = nameParam;
+        sector = sectorParam;
+        color = colorParam;
+        silver = new SimpleIntegerProperty();
+        silver.set(silverParam);
+        tCards = new ArrayList<TribalCard>();
+        for (int i = 0; i < 5; i++)
+            tCards.add(new TribalCard(this));
+    }    
+    
     public int getNumber() {
         return number;
     }
@@ -64,7 +76,7 @@ public class Player {
     }
     
     public void addSilver(int num) {
-        silver.set(num);
+        silver.set(num + silver.get());
     }
     
     public void removeSilver(int num) {

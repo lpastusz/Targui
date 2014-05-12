@@ -18,7 +18,7 @@ public class Game {
     private PlayerRepository  plRepository;
     private Round             round;
 
-    private int roundNumber;
+    private int roundNumber, currentRound;
     
     private boolean isPlayerInGame(Player player) {
         for (int i = 0; i < Constants.BoardSize; i++)
@@ -37,8 +37,20 @@ public class Game {
         createTCards();
     }
     
+    public Game(Board boardParam, ArrayList<MCard> mCardsParam, int roundNumberParam, int currentRoundParam) {
+        board = boardParam;
+        roundNumber = roundNumberParam;
+        currentRound = currentRoundParam;
+        mCards = mCardsParam;
+        dice = new Dice();
+    }
+    
     public void setPlayerRepository(PlayerRepository plRepositoryParam) {
         plRepository = plRepositoryParam;
+    }
+    
+    public PlayerRepository getPlayerRepository() {
+        return plRepository;
     }
     
     
@@ -168,10 +180,13 @@ public class Game {
         
         if (turns == 6) {
             turns = 1;
-            round = new RoundDouble();
+            round = new RoundDouble(currentRound);
+            currentRound++;
+            
         }
         else {
-            round = new RoundSingle();
+            round = new RoundSingle(currentRound);
+            currentRound++;
         }
         
         round.addCard(mCards.remove(0));
@@ -206,9 +221,6 @@ public class Game {
         round.performMove();
     }
     
-   public void performPurchase() {
-        round.performPurchase();
-    }
    
    public void performMove(Player player, int sx, int sy, int dx, int dy, int camels) {
        if (board.getCell(dy, dx).getOwner() != player)
@@ -234,7 +246,7 @@ public class Game {
     }
     
     public void placeCamels(Player player, int x, int y, int amount) {
-        if (player != board.getCell(x,y).getOwner())
+        if (player != board.getCell(y,x).getOwner())
             throw new IllegalArgumentException();
         
         if (board.getCell(y, x).getTCard() == TCard.CHOTT)
@@ -290,12 +302,54 @@ public class Game {
         
         
         for (int i = 0; i < Constants.PlayerCount; i++)
-            if (!round.didPlayerLostCell(i))
+            if (!round.didPlayerLostCell(i)) {
                 plRepository.getPlayer(i).addSilver(count[i]);
+            }
     }
     
     
     public boolean isNextRoundCardMCard() {
         return round.isNextRoundCardMCard();
+    }
+    
+    public Player getWiner() {
+        int[] playersWithPosession;
+        playersWithPosession = new int[Constants.PlayerCount];
+        for (int i = 0; i < Constants.PlayerCount; i++)
+            playersWithPosession[i] = 0;
+        
+        for (int i = 0; i < Constants.BoardSize; i++) {
+            for (int j = 0; j < Constants.BoardSize; j++) {
+                if (board.getCell(i, j).getOwner() != null)
+                    playersWithPosession[board.getCell(i, j).getOwner().getNumber()] += 1;
+            }
+        }
+        
+        int maximum = 0;
+        int maximumPlayer = 0;
+        for (int i = 0; i < Constants.PlayerCount; i++)
+            if (playersWithPosession[i] > maximum) {
+                maximum = playersWithPosession[i];
+                maximumPlayer = i;
+            }
+                    
+        return plRepository.getPlayer(maximumPlayer);
+    }
+        
+    
+    public int getMaxRoundNumber() {
+        return roundNumber;
+    }
+    
+    public int getCurrentRoundNumber() {
+        return currentRound;
+    }
+    
+    public ArrayList<MCard> getMCards() {
+        return mCards;
+    }
+    
+    public boolean isFirstRound() {
+        return (currentRound == 1);
     }
 }

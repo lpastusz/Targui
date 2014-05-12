@@ -4,13 +4,11 @@ import java.util.ArrayList;
  *
  * @author Lukas.Pasta
  */
-public class Sector {
-    static int sectorNumber = 0;
-    
+public class Sector {  
     private int number;
     
-    Sector() {
-        number = sectorNumber++;
+    Sector(int sectorNumber) {
+        number = sectorNumber;
     }
     
     public int getNumber() {

@@ -1,16 +1,23 @@
 package domain;
-import targui.Constants;
+import java.util.Map;
+import persistence.PersistenceController;
 /**
  *
  * @author Lukas.Pasta
  */
 public class DomainController {
+    PersistenceController persistenceController;
     Game game;
     PlayerRepository plRepository;
+    boolean loadedGame = false;
+    
+    public DomainController() {
+        persistenceController = PersistenceController.getInstance();
+        plRepository = new PlayerRepository();
+    }
     
     public void startGame() {
         game = new Game();
-        plRepository = new PlayerRepository();
         plRepository.setGame(game);
         game.setPlayerRepository(plRepository);
     }
@@ -71,9 +78,6 @@ public class DomainController {
         game.performMove(plRepository.getPlayer(player), sx, sy, dx, dy, camels);
     }
     
-   public void performPurchase() {
-        game.performPurchase();
-    }
     
     public boolean canPerformMove() {
         return game.canPerformMove();
@@ -100,7 +104,11 @@ public class DomainController {
     }
     
     public void placeCamels(int player, int x, int y, int amount) {
+        try {
         game.placeCamels(plRepository.getPlayer(player), x, y, amount);
+        } catch (IllegalArgumentException e) {
+            throw e;
+        }
     }
     
     public int getOpponent(int x, int y) {
@@ -126,4 +134,45 @@ public class DomainController {
     public boolean isNextRoundCardMCard() {
         return game.isNextRoundCardMCard();
     }
+    
+    public Player getWiner() {
+        return game.getWiner();
+    }
+    
+    public Map<String, Integer> getGames() 
+    {
+            return persistenceController.getGames();
+    }
+    
+    public void saveGame(String gameName) {
+        persistenceController.addGame(game, plRepository, gameName);
+    }
+    
+    public void loadGame(int gameId) {
+        Game gameLoaded = persistenceController.loadGame(gameId);
+        game = gameLoaded;
+        plRepository = game.getPlayerRepository();     
+    }
+    
+    public void setGameLoaded(boolean loadedParam) {
+        loadedGame = loadedParam;
+    }
+    
+    public boolean wasGameLoaded() {
+        return loadedGame;
+    }
+    
+    public boolean isGameInProgress() {
+        return (!(game == null));
+    }
+    
+    public void resetGame() {
+        game = null;
+        plRepository = new PlayerRepository();
+    }
+    
+    public boolean isFirstRound() {
+        return game.isFirstRound();
+    }
+         
 }

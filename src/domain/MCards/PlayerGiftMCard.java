@@ -18,4 +18,8 @@ public class PlayerGiftMCard extends MCard{
     public void proceed() {
         board.getSettlementCell(player).addCamels(10);
     }
+    
+    public Player getPlayer() {
+        return player;
+    }
 }

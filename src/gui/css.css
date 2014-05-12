@@ -3,6 +3,11 @@
      -fx-background-size: stretch; 
 }
 
+#rootMenu {
+     -fx-background-image: url("img/bg.jpg");
+     -fx-background-size: stretch;    
+}
+
 #line {
     -fx-background-color: rgba(91,90,61, 0.8);
     -fx-padding: 10px;
@@ -38,39 +43,192 @@
 #CHOTT {
     -fx-background-image: url(img/chott.jpg);
     -fx-background-size: stretch; 
+    -fx-padding: 0px 0px 38px 15px;
+    -fx-text-fill: white;
 }
 
 #ERG {
     -fx-background-image: url(img/erg.jpg);
     -fx-background-size: stretch; 
+    -fx-padding: 0px 0px 38px 15px;
+    -fx-text-fill: white;
 }
 
 #FESH {
     -fx-background-image: url(img/fesh.jpg);
     -fx-background-size: stretch; 
+    -fx-padding: 0px 0px 38px 15px;
+    -fx-text-fill: white;
 }
 
 #GUELTA {
     -fx-background-image: url(img/guelta.jpg);
     -fx-background-size: stretch; 
+    -fx-padding: 0px 0px 38px 15px;
+    -fx-text-fill: white;
 }
 
 #MINE {
     -fx-background-image: url(img/mine.jpg);
     -fx-background-size: stretch; 
+    -fx-padding: 0px 0px 38px 15px;
+    -fx-text-fill: white;
 }
 
 #MOUNTAIN {
     -fx-background-image: url(img/mountain.jpg);
     -fx-background-size: stretch; 
+    -fx-padding: 0px 0px 38px 15px;
+    -fx-text-fill: white;
 }
 
 #REG {
     -fx-background-image: url(img/reg.jpg);
     -fx-background-size: stretch; 
+    -fx-padding: 0px 0px 38px 15px;
+    -fx-text-fill: white;
 }
 
 #SETTLEMENT {
     -fx-background-image: url(img/settlement.jpg);
+    -fx-background-size: stretch;
+    -fx-padding: 0px 0px 38px 15px;
+    -fx-text-fill: white;
+}
+
+//with camels
+#CHOTTCamel {
+    -fx-background-image: url(img/chottCamel.jpg);
     -fx-background-size: stretch; 
+    -fx-padding: 0px 0px 38px 15px;
+    -fx-text-fill: white;
+}
+
+#ERGCamel {
+    -fx-background-image: url(img/ergCamel.jpg);
+    -fx-background-size: stretch; 
+    -fx-padding: 0px 0px 38px 15px;
+    -fx-text-fill: white;
+}
+
+#FESHCamel {
+    -fx-background-image: url(img/feshCamel.jpg);
+    -fx-background-size: stretch; 
+    -fx-padding: 0px 0px 38px 15px;
+    -fx-text-fill: white;
+}
+
+#GUELTACamel {
+    -fx-background-image: url(img/gueltaCamel.jpg);
+    -fx-background-size: stretch; 
+    -fx-padding: 0px 0px 38px 15px;
+    -fx-text-fill: white;
+}
+
+#MINECamel {
+    -fx-background-image: url(img/mineCamel.jpg);
+    -fx-background-size: stretch; 
+    -fx-padding: 0px 0px 38px 15px;
+    -fx-text-fill: white;
+}
+
+#MOUNTAINCamel {
+    -fx-background-image: url(img/mountainCamel.jpg);
+    -fx-background-size: stretch; 
+    -fx-padding: 0px 0px 38px 15px;
+    -fx-text-fill: white;
+}
+
+#REGCamel {
+    -fx-background-image: url(img/regCamel.jpg);
+    -fx-background-size: stretch; 
+    -fx-padding: 0px 0px 38px 15px;
+    -fx-text-fill: white;
+}
+
+#SETTLEMENTCamel {
+    -fx-background-image: url(img/settlementCamel.jpg);
+    -fx-background-size: stretch; 
+    -fx-padding: 0px 0px 38px 15px;
+    -fx-text-fill: white;
+}
+
+
+#dice1 {
+    -fx-background-image: url(img/dice1.jpg);
+    -fx-background-size:stretch;
+    -fx-border-color: black;
+    -fx-border-width: 4px;
+   // -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+#dice2 {
+    -fx-background-image: url(img/dice2.jpg);
+    -fx-background-size:stretch;
+    -fx-border-color: black;
+    -fx-border-width: 4px;
+   // -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+#dice3 {
+    -fx-background-image: url(img/dice3.jpg);
+    -fx-background-size:stretch;
+    -fx-border-color: black;
+    -fx-border-width: 4px;
+   // -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+#dice4 {
+    -fx-background-image: url(img/dice4.jpg);
+    -fx-background-size:stretch;
+    -fx-border-color: black;
+    -fx-border-width: 4px;
+   // -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+#dice5 {
+    -fx-background-image: url(img/dice5.jpg);
+    -fx-background-size:stretch;
+    -fx-border-color: black;
+    -fx-border-width: 4px;
+   // -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+#dice6 {
+    -fx-background-image: url(img/dice6.jpg);
+    -fx-background-size:stretch;
+    -fx-border-color: black;
+    -fx-border-width: 4px;
+   // -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+
+#nextCard {
+    -fx-background-image: url(img/cardFaceDown.jpg);
+    -fx-background-size:stretch;
+}
+
+#infoMessage {
+    -fx-font-size: 30px;
+    -fx-font-width: bold;
+}
+
+#engFlag {
+    -fx-background-image: url(img/engFlag.jpg);
+    -fx-background-size:stretch;    
+}
+
+#czeFlag {
+    -fx-background-image: url(img/czechFlag.png);
+    -fx-background-size:stretch;    
+}
+
+#rootLanguage {
+     -fx-background-image: url("img/bg.jpg");
+     -fx-background-size: stretch;     
 }

@@ -7,8 +7,8 @@ import java.util.ArrayList;
  * @author Lukas.Pasta
  */
 public class RoundDouble extends Round{
-    RoundDouble() {
-        super();
+    RoundDouble(int roundNum) {
+        super(roundNum);
         moveActionsAvailable = purchaseActionsAvailable = 2;
     }
     

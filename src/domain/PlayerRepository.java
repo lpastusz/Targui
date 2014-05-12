@@ -13,12 +13,16 @@ public class PlayerRepository {
     private ArrayList<Player> players;
     private Game game;
     
-    PlayerRepository() {
+    public PlayerRepository() {
         players = new ArrayList<Player>();
     }
     
     public void setGame(Game gameParam) {
         game = gameParam;
+    }
+    
+    public void addPlayer(Player player) {
+        players.add(player);
     }
     
     public void registerPlayer(String nameParam, String colorParam, int sectorParam) {

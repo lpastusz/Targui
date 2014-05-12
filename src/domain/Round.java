@@ -12,7 +12,6 @@ import targui.Constants;
  * @author Lukas.Pasta
  */
 public class Round {
-    private static int roundNumber = 0;
     private boolean[] playerLoseCell;
     private boolean mountanEconomicValueChanged;
     private boolean ergStrategicValueChanged;
@@ -20,9 +19,9 @@ public class Round {
     private ArrayList<RoundCard> usedCards;
     private int number;
     protected int moveActionsAvailable, purchaseActionsAvailable;
-    Round() {        
+    Round(int roundNum) {        
         mountanEconomicValueChanged = ergStrategicValueChanged = false;
-        number = roundNumber++;
+        number = roundNum;
         rCards = new ArrayList<RoundCard>();
         usedCards = new ArrayList<RoundCard>();
         playerLoseCell = new boolean[Constants.PlayerCount];
@@ -45,6 +44,7 @@ public class Round {
     public int getNextCard() {
         RoundCard card = rCards.remove(0);
         setNewActionsAvailable();
+        
         
         usedCards.add(card);
         if (card instanceof TribalCard) {

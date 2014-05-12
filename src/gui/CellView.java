@@ -12,6 +12,9 @@ import domain.Player;
 import domain.TCard;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -22,39 +25,60 @@ import javafx.scene.paint.Color;
  */
 public class CellView {
     Button b;
-    Cell cell2;  // debug only
-    DomainController c;  // debug only
+    int row, column;
+    EventHandler<ActionEvent> eventHandler;
     
     private GridPane grid;
-    CellView(Cell cell, DomainController controller) { // controller for debug only
-        c = controller; // debug only
-        cell2 = cell;   // debug only
+    CellView(final Cell cell, DomainController controller, int rowParam, int columnParam) { // controller for debug only
         
+        row = rowParam;
+        column = columnParam;
         b = new Button();
         b.setPrefSize(40, 40); b.setMinSize(70, 70);
-        b.setId(cell.getTCard().toString());
+        
+        if (cell.getCamels() > 0)
+            b.setId(cell.getTCard().toString() + "Camel");
+        else
+            b.setId(cell.getTCard().toString());
         
         cell.getTCardProperty().addListener(new ChangeListener() { 
             public void changed(ObservableValue observableValue, Object oldValue,Object newValue) {
-                b.setId(((TCard)newValue).toString());
+                String id = ((TCard)newValue).toString();
+                if (cell.getCamels() != 0)
+                    id += "Camel";
+                b.setId(id);
             }                 
         }); 
+        
         
         cell.getCamelsProperty().addListener(new ChangeListener() { 
             public void changed(ObservableValue observableValue, Object oldValue,Object newValue) {
-                if (Integer.parseInt(newValue.toString()) != 0)
+                if (Integer.parseInt(newValue.toString()) != 0) {
                     b.setText(newValue.toString());
-                else
+                    b.setId(cell.getTCard().toString() + "Camel");
+                }
+                else {
                     b.setText("");
+                    b.setId(cell.getTCard().toString());
+                }
             }                 
         }); 
         
         
+        if (cell.getCamels() != 0)
+            b.setText(String.valueOf(cell.getCamels()));
         
         
-        if (cell.getOwner() != null)
-            b.setStyle("-fx-border: 2px solid rgb(" + Color.web(cell.getOwner().getColor()).getRed() + "" + Color.web(cell.getOwner().getColor()).getGreen() + "" + Color.web(cell.getOwner().getColor()).getBlue() + ")");
-           
+        if (cell.getOwner() != null) {
+            Double red = (Color.web(cell.getOwner().getColor()).getRed())*255;
+            String redInt = Integer.toString(red.intValue());
+            Double green = (Color.web(cell.getOwner().getColor()).getGreen())*255;
+            String greenInt = Integer.toString(green.intValue());
+            Double blue = (Color.web(cell.getOwner().getColor()).getBlue())*255;
+            String blueInt = Integer.toString(blue.intValue());
+            b.setStyle("-fx-border-width: 6px; fx-border-style: inset; -fx-border-color: rgba(" + redInt + ", " + greenInt + ", " + blueInt + ", 0.6);");
+        }
+
         cell.getPlayerProperty().addListener(new ChangeListener() { 
             public void changed(ObservableValue observableValue, Object oldValue,Object newValue) {
                 Double red = Color.web(((Player)newValue).getColor()).getRed()*255;
@@ -63,12 +87,7 @@ public class CellView {
                 String greenInt = Integer.toString(green.intValue());
                 Double blue = Color.web(((Player)newValue).getColor()).getBlue()*255;
                 String blueInt = Integer.toString(blue.intValue());
-                /*
-                if (redInt.length() == 1) redInt += redInt.substring(0, 1);
-                if (greenInt.length() == 1) greenInt += greenInt.substring(0, 1);
-                if (blueInt.length() == 1) blueInt += blueInt.substring(0, 1);
-                */
-                b.setStyle("-fx-border-width: 6px; fx-border-style: inset; -fx-border-color: rgba(" + redInt + ", " + greenInt + ", " + blueInt + ", 0.3);");
+                b.setStyle("-fx-border-width: 6px; fx-border-style: inset; -fx-border-color: rgba(" + redInt + ", " + greenInt + ", " + blueInt + ", 0.6);");
             }                 
         }); 
         
@@ -79,4 +98,35 @@ public class CellView {
     public GridPane getView() {
         return grid;
     }
+    
+    public Button getButton() {
+        return b;
+    }
+    
+    public int getRow() {
+        return row;
+    }
+    
+    public int getColumn() {
+        return column;
+    }
+    
+    public void registerHandle(EventHandler<ActionEvent> e) {
+        b.setOnAction(e);
+        eventHandler = e;
+    }
+    
+    public EventHandler<ActionEvent> getHandle() {
+        return eventHandler;
+    }
+    
+    public void removeHandler() {
+       // b.removeEventHandler(ActionEvent.ACTION, eventHandler);
+        b.setOnAction(new EventHandler<ActionEvent>() {     
+            public void handle(ActionEvent event) {  
+                ;
+            }
+        });
+    }
 }
+
